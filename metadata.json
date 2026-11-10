@@ -1,0 +1,6 @@
+{
+  "name": "General Hospital Management System (DBMS)",
+  "description": "Comprehensive academic DBMS project and interactive Hospital Management System with Oracle SQL schema, 26 queries, ER diagram, normalization, and full records management.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

@@ -1,0 +1,108 @@
+erDiagram
+    %% ========================================================================
+    %% GENERAL HOSPITAL MANAGEMENT SYSTEM - ENTITY RELATIONSHIP DIAGRAM
+    %% ========================================================================
+    %% Experiment 11: DBMS - Academic Relational Schema & Cardinalities
+    %% ========================================================================
+
+    PATIENT ||--o{ ADMISSION : "undergoes (1:N)"
+    WARD ||--o{ ADMISSION : "accommodates (1:N)"
+    GP ||--o{ ADMISSION : "refers (1:N)"
+    DOCTOR ||--o{ ADMISSION : "supervises as consultant (1:N)"
+
+    PATIENT ||--o{ EXAMINATION : "is examined in (1:N)"
+    DOCTOR ||--o{ EXAMINATION : "conducts (1:N)"
+
+    PATIENT ||--o{ TEST_RECORD : "takes (1:N)"
+    MEDICAL_TEST ||--o{ TEST_RECORD : "is performed as (1:N)"
+    DOCTOR ||--o{ TEST_RECORD : "prescribes/interprets (1:N)"
+
+    PATIENT ||--o{ TREATMENT_RECORD : "receives (1:N)"
+    TREATMENT ||--o{ TREATMENT_RECORD : "is administered in (1:N)"
+    DOCTOR ||--o{ TREATMENT_RECORD : "administers (1:N)"
+
+    PATIENT {
+        number Patient_ID PK "Primary Key"
+        string Patient_Name "Full Name (NOT NULL)"
+        date Date_of_Birth "Date of Birth (NOT NULL)"
+        string Gender "Gender (Male/Female/Other)"
+        string Phone UK "Unique Contact Number"
+        string Address "Residential Address"
+        string Blood_Group "Blood Group (e.g. O+, A+)"
+    }
+
+    WARD {
+        number Ward_ID PK "Primary Key"
+        string Ward_Name UK "Unique Ward Name"
+        string Ward_Type "Department Type"
+        string Location "Building and Floor"
+        number Capacity "Total Bed Capacity (> 0)"
+    }
+
+    DOCTOR {
+        number Doctor_ID PK "Primary Key"
+        string Doctor_Name "Doctor Full Name"
+        string Specialization "Medical Discipline"
+        string Phone UK "Unique Contact Number"
+        string Email UK "Unique Institutional Email"
+    }
+
+    GP {
+        number GP_ID PK "Primary Key"
+        string GP_Name "General Practitioner Name"
+        string Clinic_Name "Primary Care Clinic Name"
+        string Phone UK "Contact Telephone"
+    }
+
+    ADMISSION {
+        number Admission_ID PK "Primary Key"
+        number Patient_ID FK "References PATIENT"
+        number Ward_ID FK "References WARD"
+        number GP_ID FK "References GP"
+        number Consultant_ID FK "References DOCTOR"
+        date Admission_Date "Date of Inpatient Entry"
+        date Discharge_Date "Date of Discharge (Nullable)"
+        string Admission_Reason "Diagnosis / Admitting Complaint"
+    }
+
+    EXAMINATION {
+        number Examination_ID PK "Primary Key"
+        number Patient_ID FK "References PATIENT"
+        number Doctor_ID FK "References DOCTOR"
+        date Examination_Date "Clinical Checkup Date"
+        string Findings "Diagnostic Clinical Findings"
+        string Remarks "Physician Recommendations"
+    }
+
+    MEDICAL_TEST {
+        number Test_ID PK "Primary Key"
+        string Test_Name UK "Standard Test Nomenclature"
+        number Test_Cost "Standard Cost Tariff (>= 0)"
+        string Description "Diagnostic Scope"
+    }
+
+    TEST_RECORD {
+        number Test_Record_ID PK "Primary Key (Junction Table)"
+        number Patient_ID FK "References PATIENT"
+        number Test_ID FK "References MEDICAL_TEST"
+        number Doctor_ID FK "References DOCTOR"
+        date Test_Date "Date of Specimen / Test"
+        string Test_Result "Pathology / Diagnostic Outcome"
+        string Status "Status (Pending/Completed)"
+    }
+
+    TREATMENT {
+        number Treatment_ID PK "Primary Key"
+        string Treatment_Name UK "Procedure Nomenclature"
+        number Cost "Procedure Tariff (>= 0)"
+        string Description "Therapeutic Scope"
+    }
+
+    TREATMENT_RECORD {
+        number Treatment_Record_ID PK "Primary Key (Junction Table)"
+        number Patient_ID FK "References PATIENT"
+        number Treatment_ID FK "References TREATMENT"
+        number Doctor_ID FK "References DOCTOR"
+        date Treatment_Date "Date Administered"
+        string Remarks "Clinical Progress Observations"
+    }
